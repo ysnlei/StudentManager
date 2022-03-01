@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="club.justca.studentmanager.mapper.RewardAndPunishMapper">
+
+    <select id="findAll" resultType="rewardAndPunish">
+        select *
+        from reward_and_punish
+    </select>
+    <select id="findByPage" resultType="rewardAndPunish">
+        select *
+        from reward_and_punish
+        limit #{offset},#{id}
+    </select>
+    <select id="findByStudentNum" resultType="rewardAndPunish">
+        select *
+        from reward_and_punish
+        where student_num = #{studentNum}
+    </select>
+    <select id="findById" resultType="rewardAndPunish">
+        select *
+        from reward_and_punish
+        where id = #{id}
+    </select>
+    <select id="findByRewardId" resultType="rewardAndPunish">
+        select *
+        from reward_and_punish
+        where reward_id = #{rewardId}
+    </select>
+
+    <select id="findByStudentNumAndRewardId" resultType="rewardAndPunish">
+        select *
+        from reward_and_punish
+        where reward_id = #{rewardId}
+          and student_num = #{studentNum}
+    </select>
+
+    <select id="findByType" resultType="rewardAndPunish">
+        select *
+        from reward_and_punish
+        where type=#{type}
+    </select>
+
+    <delete id="deleteAll">
+        delete
+        from reward_and_punish;
+    </delete>
+    <delete id="deleteById">
+        delete
+        from reward_and_punish
+        where id = #{id}
+    </delete>
+    <delete id="deleteByStudentNum">
+        delete
+        from reward_and_punish
+        where student_num = #{studentNum}
+    </delete>
+    <insert id="insert" parameterType="rewardAndPunish">
+        INSERT INTO `reward_and_punish`(id, student_num, reward_id, content, state, type)
+        values (NULL, #{studentNum}, #{rewardId}, #{content}, #{state}, #{type})
+    </insert>
+    <update id="update" parameterType="rewardAndPunish">
+        UPDATE `reward_and_punish`
+        SET student_num = #{studentNum},
+            reward_id   = #{rewardId},
+            content     = #{content},
+            state       = #{state},
+            type        = #{type}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

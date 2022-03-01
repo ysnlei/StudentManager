@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="club.justca.studentmanager.mapper.TeacherMapper">
+
+    <select id="findAll" resultType="teacher">
+        SELECT *
+        FROM `teacher`
+    </select>
+
+    <select id="findAllExceptSuperAdmin" resultType="teacher">
+        SELECT *
+        FROM `teacher`
+        WHERE manage_major != '0'
+    </select>
+
+    <select id="findByTeacherNum" resultType="teacher">
+        SELECT *
+        FROM `teacher`
+        where teacher_num = #{teacherNum}
+    </select>
+
+    <select id="findByTeacherNumAndPassword" resultType="teacher">
+        SELECT *
+        FROM `teacher`
+        where teacher_num = #{teacherNum}
+          and password = #{password}
+    </select>
+
+    <insert id="insert" parameterType="teacher">
+        INSERT INTO `teacher`(id, teacher_num, password, name, gender, email, manage_major)
+        values (null, #{teacherNum}, #{password}, #{name}, #{gender}, #{email}, #{manageMajor})
+    </insert>
+
+    <delete id="deleteById">
+        delete
+        from teacher
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteByTeacherNum">
+        delete
+        from `teacher`
+        where teacher_num = #{teacherNum}
+    </delete>
+
+    <update id="update" parameterType="teacher">
+        UPDATE `teacher`
+        SET password     = #{password},
+            name         = #{name},
+            gender       = #{gender},
+            manage_major = #{manageMajor},
+            email        = #{email}
+        WHERE teacher_num = #{teacherNum}
+    </update>
+</mapper>

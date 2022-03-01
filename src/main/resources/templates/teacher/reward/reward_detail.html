@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>奖励明细</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            奖惩信息管理
+                        </header>
+                        <div class="panel-body">
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>奖励名称</th>
+                                        <th>学号</th>
+                                        <th>姓名</th>
+                                        <th>绩点</th>
+                                        <th>申请说明</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="rewardAndPunishVO:${rewardAndPunishList}">
+                                        <td th:text="${rewardAndPunishVOStat.count}"></td>
+                                        <td th:text="${rewardName}"></td>
+                                        <td th:text="${rewardAndPunishVO.rewardAndPunish.studentNum}"></td>
+                                        <td th:text="${rewardAndPunishVO.stuName}"></td>
+                                        <td th:text="${#numbers.formatDecimal(rewardAndPunishVO.gpa,0,'COMMA',2,'POINT')}"></td>
+                                        <td th:text="${rewardAndPunishVO.rewardAndPunish.content}"></td>
+                                        <!--待审核、通过、驳回-->
+                                        <td th:text="${rewardAndPunishVO.rewardAndPunish.state}"></td>
+                                        <td width="150px">
+                                            <div th:if="${rewardAndPunishVO.rewardAndPunish.state=='待审核'}">
+                                                <button id="confirmBtn"
+                                                        th:studentNum="${rewardAndPunishVO.rewardAndPunish.studentNum}"
+                                                        th:rewardId="${rewardAndPunishVO.rewardAndPunish.rewardId}"
+                                                        class="btn btn-success">同意</button>
+                                                <button class="btn btn-danger" id="rejectBtn"
+                                                        th:studentNum="${rewardAndPunishVO.rewardAndPunish.studentNum}"
+                                                        th:rewardId="${rewardAndPunishVO.rewardAndPunish.rewardId}"
+                                                >驳回</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!--body wrapper end-->
+    </div>
+</section>
+
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<script>
+    $("#confirmBtn").click(function (){
+        let rewardId = $(this).attr("rewardId");
+        let studentNum = $(this).attr("studentNum");
+        console.log(rewardId+' '+studentNum);
+        $.post("/teacher/rewardConfirm",{
+            rewardId:rewardId,
+            studentNum:studentNum
+        },function (data){
+            if(data==="true"){
+                console.log("同意成功")
+                window.location.reload();
+            }else {
+                console.log("同意失败")
+            }
+        });
+    })
+
+    $("#rejectBtn").click(function (){
+        let rewardId = $(this).attr("rewardId");
+        let studentNum = $(this).attr("studentNum");
+        console.log(rewardId+' '+studentNum);
+        $.post("/teacher/rewardReject",{
+            rewardId:rewardId,
+            studentNum:studentNum
+        },function (data){
+            if(data==="true"){
+                alert("驳回成功")
+                window.location.reload();
+            }else {
+                alert("驳回失败")
+            }
+        });
+    })
+</script>
+</body>
+</html>

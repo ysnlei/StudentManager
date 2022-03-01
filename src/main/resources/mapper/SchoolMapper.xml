@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="club.justca.studentmanager.mapper.SchoolYearMapper">
+
+    <select id="findAll" resultType="schoolYear">
+        SELECT *
+        FROM `school_year`;
+    </select>
+
+    <select id="findByPage" resultType="schoolYear">
+        SELECT *
+        from `school_year`
+        order by id desc
+        limit #{offset},#{rows}
+    </select>
+
+    <select id="findById" resultType="schoolYear">
+        SELECT *
+        from `school_year`
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete
+        from `school_year`
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="schoolYear">
+        INSERT INTO `school_year`(id, year, photo_url)
+        values (NULL, #{year}, #{photoUrl})
+    </insert>
+
+    <update id="update" parameterType="schoolYear">
+        UPDATE `school_year`
+        SET year      = #{year},
+            photo_url = #{photoUrl}
+        WHERE id = #{id}
+    </update>
+
+    <select id="getCount" resultType="integer">
+        select count(*) from school_year;
+    </select>
+
+
+</mapper>

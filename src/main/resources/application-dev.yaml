@@ -1,0 +1,32 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/manage_student?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
+    username: root
+    password: 123456
+  servlet:
+    multipart:
+      max-file-size: 40MB #4194304
+  mail:
+    protocol: smtp
+    host: smtp.163.com
+    port: 25
+    username: managerstudent@163.com
+    password: VBAXQLBYQTTRKKFT
+
+    #username: 2943338200@qq.com
+    #password: tzwwoizjoydcdfag
+mybatis:
+  #mapper 映射文件路径
+  mapper-locations: classpath:mapper/*Mapper.xml
+  #实体类包的别名
+  type-aliases-package: club.justca.studentmanager.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+just:
+  jwgl:
+    loginUrl: http://jwgl.just.edu.cn:8080/jsxsd/xk/LoginToXk
+    scoreUrl: http://jwgl.just.edu.cn:8080/jsxsd/kscj/cjcx_list

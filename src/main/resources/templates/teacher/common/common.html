@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>公共部分</title>
+</head>
+<body>
+<!--公共css开始-->
+<div th:fragment="common-css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/style-responsive.css}" rel="stylesheet">
+</div>
+<!--公共css结束-->
+
+<!--公共js开始-->
+<div th:fragment="common-script">
+    <!-- Placed js at the end of the document so the pages load faster -->
+    <script th:src="@{/js/jquery-1.10.2.min.js}"></script>
+    <script th:src="@{/js/jquery-ui-1.9.2.custom.min.js}"></script>
+    <script th:src="@{/js/jquery-migrate-1.2.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/modernizr.min.js}"></script>
+    <script th:src="@{/js/jquery.nicescroll.js}"></script>
+
+    <!--common scripts for all pages-->
+    <script th:src="@{/js/scripts.js}"></script>
+</div>
+<!--公共js结束-->
+
+<!-- 左侧开始-->
+<div th:fragment="left-nav" class="left-side sticky-left-side">
+    <!--左侧顶部标题字体开始-->
+    <div class="logo">
+        <a th:href="@{/teacher/index}">学生信息管理</a>
+    </div>
+    <!--左侧顶部标题字体开结束-->
+    <div class="left-side-inner">
+        <!--sidebar nav start-->
+        <ul class="nav nav-pills nav-stacked custom-nav">
+            <!--            <li th:class="${menu=='index'?'active':''}">-->
+            <!--                <a th:href="@{/teacher/index}">-->
+            <!--                    <i class="fa fa-home"></i>-->
+            <!--                    <span>主页</span>-->
+            <!--                </a>-->
+            <!--            </li>-->
+
+            <li th:class="${menu=='stuInfo'?'menu-list nav-active':'menu-list'}"><a href=""><i class="fa fa-laptop"></i>
+                <span>学生基本信息</span></a>
+                <ul class="sub-menu-list">
+                    <li th:class="${page=='studentList'?'active':''}">
+                        <a th:href="@{/teacher/studentList}">学生名单</a>
+                    </li>
+                    <li th:class="${page=='studentScore'?'active':''}">
+                        <a th:href="@{/teacher/studentScore}">学生成绩查询</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li th:if="${session.loginUser.manageMajor=='0'}" th:class="${menu=='teacherInfo'?'active':''}">
+                <a th:href="@{/teacher/teacherManage}">
+                    <i class="fa fa-legal"></i>
+                    <span>管理员信息管理</span>
+                </a>
+            </li>
+
+            <li th:class="${menu=='reward'?'menu-list nav-active':'menu-list'}"><a href=""><i class="fa fa-book"></i>
+                <span>奖惩信息管理</span></a>
+                <ul class="sub-menu-list">
+                    <li th:class="${page=='rewardCreate'?'active':''}">
+                        <a th:href="@{/teacher/rewardCreate}">发布奖励申请</a>
+                    </li>
+                    <li th:class="${page=='rewardManage'?'active':''}">
+                        <a th:href="@{/teacher/rewardManage}">奖励信息管理</a>
+                    </li>
+                    <li th:class="${page=='punishManage'?'active':''}">
+                        <a th:href="@{/teacher/punishManage}">惩罚信息管理</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li th:if="${session.loginUser.manageMajor=='0'}"
+                th:class="${menu=='classOrderManage'?'menu-list nav-active':'menu-list'}">
+                <a href=""><i class="fa fa-map-marker"></i>
+                    <span>教室预约管理</span></a>
+                <ul class="sub-menu-list">
+                    <li th:class="${page=='buildingManage'?'active':''}">
+                        <a th:href="@{/teacher/buildingManage}">教学楼管理</a>
+                    </li>
+                    <li th:class="${page=='orderDetail'?'active':''}">
+                        <a th:href="@{/teacher/orderDetail}">预约审批</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li th:if="${session.loginUser.manageMajor!='0'}"
+                th:class="${menu=='classOrderManage'?'menu-list nav-active':'menu-list'}">
+                <a href=""><i class="fa fa-map-marker"></i>
+                    <span>教室预约</span></a>
+                <ul class="sub-menu-list">
+                    <li th:class="${page=='orderNew'?'active':''}">
+                        <a th:href="@{/teacher/orderNew}">教室预约</a>
+                    </li>
+                    <li th:class="${page=='classroomOrder'?'active':''}">
+                        <a th:href="@{/teacher/classroomOrder}">已预约教室</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li th:class="${menu=='leave'?'active':''}">
+                <a th:href="@{/teacher/leaveManage}">
+                    <i class="fa fa-legal"></i>
+                    <span>请销假管理</span>
+                </a>
+            </li>
+
+            <li th:class="${menu=='fund'?'active':''}">
+                <a th:href="@{/teacher/fundManage}">
+                    <i class="fa fa-cny"></i>
+                    <span>班费管理</span>
+                </a>
+            </li>
+
+
+            <li th:class="${menu=='notice'?'menu-list nav-active':'menu-list'}"><a href=""><i
+                    class="fa fa-bullhorn"></i>
+                <span>通知管理</span></a>
+                <ul class="sub-menu-list">
+                    <li th:class="${page=='noticeManage'?'active':''}">
+                        <a th:href="@{/teacher/noticeManage}">已发布通知</a></li>
+                    </li>
+                    <li th:class="${page=='noticeCreate'?'active':''}">
+                        <a th:href="@{/teacher/noticeCreate}">发布通知</a></li>
+                </ul>
+            </li>
+
+            <li th:class="${menu=='schoolYear'?'menu-list nav-active':'menu-list'}"><a href=""><i
+                    class="fa fa-calendar"></i>
+                <span>校历管理</span></a>
+                <ul class="sub-menu-list">
+                    <li th:class="${page=='schoolYearManage'?'active':''}">
+                        <a th:href="@{/teacher/schoolYearManage}">已发布校历</a>
+                    </li>
+                    <li th:class="${page=='schoolYearCreate'?'active':''}">
+                        <a th:href="@{/teacher/schoolYearCreate}">校历发布</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li><a th:href="@{/logout}"><i class="fa fa-sign-in"></i> <span>退出登录</span></a></li>
+
+        </ul>
+        <!--sidebar nav end-->
+    </div>
+</div>
+<!-- 左侧结束-->
+
+<!--顶部开始-->
+<div th:fragment="top-nav" class="header-section">
+
+    <!--菜单展开按钮开始-->
+    <a class="toggle-btn"><i class="fa fa-bars"></i></a>
+    <!--菜单展开按钮结束-->
+
+
+    <!--notification menu start -->
+    <div class="menu-right">
+        <ul class="notification-menu">
+            <li>
+                <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                   th:text="${'欢迎您：'+session.loginUser.name}">
+                    <!--                    <img th:src="@{/images/photos/user-avatar.png}" alt=""/>-->
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                    <li><a th:href="@{/logout}"><i class="fa fa-sign-out"></i> Log Out</a></li>
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+    <!--notification menu end -->
+</div>
+<!--顶部结束-->
+
+<!--wangEditor生成和配置-->
+<div th:fragment="wangEditor">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+    <script type="text/javascript">
+        const E = window.wangEditor
+        const editor = new E("#editor-div")
+
+        editor.config.menus = [
+            'head', 'bold', 'fontSize', 'fontName', 'italic', 'underline', 'strikeThrough',
+            'indent', 'lineHeight', 'foreColor', 'backColor', 'link', 'list', 'todo', 'justify',
+            'quote', 'emoticon', 'image', 'table', 'code', 'splitLine', 'undo', 'redo',
+        ]
+
+        /* 处理上传图片的controller路径 */
+        editor.config.uploadImgServer = '/backend/upload/upload-img'
+        editor.config.uploadFileName = 'upload'
+        editor.config.pasteFilterStyle = false
+        editor.config.pasteIgnoreImg = true
+        editor.config.height = 500
+
+        editor.create()
+    </script>
+</div>
+<!--wangEditor配置结束-->
+
+<!--图片上传和预览(轮播图中用)-->
+<script th:fragment="img-preview">
+    $("#img-url").change(function (e) {
+        let fileName = $(this).val()
+        let index = fileName.lastIndexOf(".");
+        if (index > 0) {
+            let suffix = fileName.substr(index + 1).toLowerCase();
+            if (suffix === "jpg" || suffix === 'png' || suffix === "jpeg") {
+                let formData = new FormData();
+                formData.append("fileUpload", this.files[0]);
+                $.ajax({
+                    url: "[[@{/backend/upload/attachment_upload}]]",
+                    type: 'POST',
+                    data: formData,
+                    // 告诉jQuery不要去处理发送的数据
+                    processData: false,
+                    // 告诉jQuery不要去设置Content-Type请求头
+                    contentType: false,
+                    success: function (data) {
+                        console.log(data);
+                        let src = data.url;
+                        $("#preview-img").attr("src", src)
+                        $("#preview-img-a").attr("href", src)
+                    },
+                    error: function (data) {
+                        alert("服务器错误，请联系管理员！")
+                        $(this).val("")
+                        $("#preview-img").attr("src", "[[@{/images/default-img.png}]]")
+                        $("#preview-img-a").removeAttr("href");
+                    }
+                });
+                return;
+            }
+        }
+        alert('图片类型错误，请选择jpg或png格式的图片')
+        $(this).val("")
+        $("#preview-img").attr("src", "[[@{/images/default-img.png}]]")
+        $("#preview-img-a").removeAttr("href");
+    })
+</script>
+<!--图片上传预览结束-->
+
+</body>
+</html>

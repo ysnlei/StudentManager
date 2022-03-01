@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="club.justca.studentmanager.mapper.BuildingMapper">
+    <select id="findAll" resultType="building">
+        SELECT *
+        FROM `building`;
+    </select>
+
+    <select id="findById" resultType="building">
+        SELECT *
+        from `building`
+        where id = #{id}
+    </select>
+
+    <update id="update" parameterType="building">
+        UPDATE `building`
+        SET building_name = #{buildingName},
+            total_floor   = #{totalFloor}
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insert" parameterType="building">
+        INSERT INTO `building`(id, building_name, total_floor)
+        values (NULL, #{buildingName}, #{totalFloor})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE
+        FROM building
+        WHERE id = #{id}
+    </delete>
+
+</mapper>

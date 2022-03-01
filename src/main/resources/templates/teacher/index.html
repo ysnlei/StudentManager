@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>学生信息管理系统</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+</body>
+</html>
+
+
+
+<!--wangEditor代码-->
+<!--<div id="editor-div"></div>-->
+<!--<div th:replace="~{/teacher/common/common::wangEditor}"></div>-->

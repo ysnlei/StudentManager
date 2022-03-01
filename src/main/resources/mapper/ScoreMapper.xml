@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="club.justca.studentmanager.mapper.ScoreMapper">
+
+    <!-- 配置查询所有 ,写完就不用写实现类了-->
+    <select id="findByStudentNum" resultType="score" parameterType="string">
+        SELECT *
+        FROM `score`
+        where student_num = #{studentNum};
+    </select>
+
+    <insert id="insertScore" parameterType="score">
+        INSERT INTO `score`
+        VALUES (NULL, #{studentNum}, #{courseTerm}, #{courseNum}, #{courseName}, #{score},
+                #{courseCredit}, #{courseHour}, #{examination}, #{courseNature});
+    </insert>
+
+    <delete id="deleteByStudentNum" parameterType="string">
+        delete
+        from `score`
+        where student_num = #{studentNum};
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>班费缴纳</title>
+    <link rel="stylesheet" th:href="@{/css/preview-article.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <div th:replace="~{/student/common::common-css}"></div>
+    <style>
+        .container {
+            width: 1000px;
+            margin: auto;
+            position: relative;
+        }
+
+        tr, td {
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{/student/common::header}" class="header"></div>
+<!--内容区域开始-->
+<div class="container" style="min-height: 650px">
+    <div class="row-fluid">
+        <legend>班费缴纳</legend>
+        <hr>
+        <a class="btn btn-success" th:href="@{/student/fundDetail}">查看付款明细</a>
+        <div class="span12">
+            <div class="form-group">
+                <div class="col-sm-8">
+                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                </div>
+            </div>
+            <br>
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>收款主题</th>
+                    <th>金额</th>
+                    <th>支付状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="classFund:${classFundLists}" style="height: 51px">
+                    <td th:text="${classFundStat.count}"></td>
+                    <td th:text="${classFund.title}"></td>
+                    <td th:text="${classFund.money}"></td>
+                    <td th:if="${pay.get(classFundStat.count-1)==0}" th:text="未支付"></td>
+                    <td th:if="${pay.get(classFundStat.count-1)==1}" th:text="已支付"></td>
+                    <td>
+                        <a th:if="${pay.get(classFundStat.count-1)==0}"
+                           th:href="@{/student/pay((classFundListId=${classFund.id}))}"
+                           target="_blank"
+                           class="btn btn-success">支付
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--内容区域结束-->
+
+<div class="banner-shadow"></div>
+
+<div class="footer">
+    <p>Copyright &copy; 2021 JUST All rights reserved.</p>
+</div>
+<div th:replace="~{/student/common::common-script}"></div>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+</body>
+</html>

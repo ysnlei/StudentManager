@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>校历修改</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            校历修改
+                        </header>
+                        <div class="panel-body">
+                            <form class="form-horizontal adminex-form" method="get" onsubmit="return false">
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label">id</label>
+                                    <div class="col-sm-8">
+                                        <input readonly type="text" id="schoolYearId" th:value="${schoolYear.id}"
+                                               name="duty" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label">年份</label>
+                                    <div class="col-sm-8">
+                                        <input id="year" name="year" type="text" class="form-control tooltips"
+                                               data-trigger="hover" th:value="${schoolYear.year}"
+                                               data-toggle="tooltip" title="" placeholder="年份"
+                                               data-original-title="示例：2021-2022">
+                                    </div>
+                                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="img-url" class="col-sm-2 col-sm-2 control-label">校历图片</label>
+                                    <div class="col-sm-8">
+                                        <input id="img-url" type="file" name="img-url" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label">图片预览</label>
+                                    <div class="col-sm-10">
+                                        <div>
+                                            <a id="preview-img-a" target="_blank" th:href="${schoolYear.photoUrl}">
+                                                <img id="preview-img"
+                                                     style="width: 302px;height: 220px;border: 5px solid #666666;"
+                                                     th:src="${schoolYear.photoUrl}" alt=""
+                                                     onerror="/images/img-error.png">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                                    <div class="col-sm-8">
+                                        <button id="createBtn" class="btn btn-primary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;确认&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!--body wrapper end-->
+    </div>
+</section>
+
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<!--图片上传和预览(轮播图中用)-->
+<script th:fragment="img-preview">
+    $("#img-url").change(function (e) {
+        let fileName = $(this).val()
+        let index = fileName.lastIndexOf(".");
+        if (index > 0) {
+            let suffix = fileName.substr(index + 1).toLowerCase();
+            if (suffix === "jpg" || suffix === 'png' || suffix === "jpeg") {
+                let formData = new FormData();
+                formData.append("fileUpload", this.files[0]);
+                $.ajax({
+                    url: "[[@{/backend/upload/attachment_upload}]]",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log(data);
+                        let src = data.url;
+                        $("#preview-img").attr("src", src)
+                        $("#preview-img-a").attr("href", src)
+                    },
+                    error: function (data) {
+                        alert("服务器错误，请联系管理员！")
+                        $(this).val("")
+                        $("#preview-img").attr("src", "[[@{/images/img-error.png}]]")
+                        $("#preview-img-a").removeAttr("href");
+                    }
+                });
+                return;
+            }
+        }
+        alert('图片类型错误，请选择jpg或png格式的图片')
+        $(this).val("")
+        $("#preview-img").attr("src", "[[@{/images/img-error.png}]]")
+        $("#preview-img-a").removeAttr("href");
+    })
+</script>
+
+<script>
+    $("#createBtn").click(function () {
+        let year = $("#year").val();
+        let schoolYearId = $("#schoolYearId").val();
+        let photoUrl = $("#preview-img-a").attr("href");
+        if (year === "" || photoUrl === "" || year === undefined || photoUrl === null) {
+            alert("信息填写不完整")
+        } else {
+            if (confirm("是否确认修改？")) {
+                $.post("/teacher/schoolYearUpdate",
+                    {
+                        id: schoolYearId,
+                        year: year,
+                        photoUrl: photoUrl
+                    },
+                    function (data, status) {
+                        if (data === "true") {
+                            alert("修改成功");
+                            window.location.href = "/teacher/schoolYearManage";
+                        } else {
+                            alert("修改失败")
+                        }
+                    });
+            }
+        }
+    });
+</script>
+<!--图片上传预览结束-->
+</body>
+</html>
+

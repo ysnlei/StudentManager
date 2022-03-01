@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>班费管理</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            班费管理
+                        </header>
+                        <div class="panel-body">
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>学号</th>
+                                        <th>姓名</th>
+                                        <th>交易号</th>
+                                        <th>商户号</th>
+                                        <th>交易状态</th>
+                                        <th>交易时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr style="height: 55px;vertical-align: center!important;"
+                                        th:each="fundDetailVO:${fundDetailVOList}">
+                                        <td th:text="${fundDetailVOStat.count}"></td>
+                                        <td th:text="${fundDetailVO.student.studentNum}"></td>
+                                        <td th:text="${fundDetailVO.student.name}"></td>
+                                        <td th:if="${fundDetailVO.classFundDetail!=null}"
+                                            th:text="${fundDetailVO.classFundDetail.tradeNo}"></td>
+                                        <td th:if="${fundDetailVO.classFundDetail!=null}"
+                                            th:text="${fundDetailVO.classFundDetail.outTradeNo}"></td>
+                                        <td th:if="${fundDetailVO.classFundDetail!=null}"
+                                            th:text="${fundDetailVO.classFundDetail.status}"></td>
+                                        <td th:if="${fundDetailVO.classFundDetail!=null}"
+                                            th:text="${#dates.format(fundDetailVO.classFundDetail.payTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                        <td th:if="${fundDetailVO.classFundDetail!=null}"></td>
+
+                                        <td th:if="${fundDetailVO.classFundDetail==null}"> — —</td>
+                                        <td th:if="${fundDetailVO.classFundDetail==null}"> — —</td>
+                                        <td th:if="${fundDetailVO.classFundDetail==null}">未支付</td>
+                                        <td th:if="${fundDetailVO.classFundDetail==null}"> — —</td>
+                                        <td th:if="${fundDetailVO.classFundDetail==null}">
+                                            <button class="btn btn-danger sendEmailBtn"
+                                                    th:studentNum="${fundDetailVO.student.studentNum}">
+                                                发送邮件催缴
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<!--dynamic table-->
+<script type="text/javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization-->
+<script th:src="@{/js/dynamic_table_init.js}"></script>
+<script>
+    $(function () {
+        $("#dynamic-table_filter").hide();
+    })
+
+    $(".sendEmailBtn").click(function () {
+        let studentNum = $(this).attr("studentNum")
+        $.post("/teacher/sendFundNotice",
+            {
+                studentNum: studentNum
+            },
+            function (data, stat) {
+                alert("邮件发送成功")
+            }
+        )
+
+    })
+</script>
+</body>
+</html>

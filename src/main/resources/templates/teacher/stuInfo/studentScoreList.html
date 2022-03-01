@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>学生成绩查询</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            学生成绩查询
+                        </header>
+                        <div class="panel-body">
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th class="sorting_desc">学号</th>
+                                        <th>姓名</th>
+                                        <th>专业</th>
+                                        <th>绩点</th>
+                                        <th>查看成绩</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="student:${studentList}">
+                                        <td th:text="${studentStat.count}"></td>
+                                        <td th:text="${student.studentNum}"></td>
+                                        <td th:text="${student.name}"></td>
+                                        <td th:text="${student.major}"></td>
+                                        <td th:if="${studentGPA.get(studentStat.index)!=0.0}"
+                                            th:text="${#numbers.formatDecimal(studentGPA.get(studentStat.index),0,'COMMA',2,'POINT')}"></td>
+                                        <td th:if="${studentGPA.get(studentStat.index)==0.0}" th:text="未导入成绩"></td>
+                                        <td>
+                                            <a th:if="${studentGPA.get(studentStat.index)==0.0}" style="color: #ccc">
+                                                成绩未导入
+                                            </a>
+                                            <a th:if="${studentGPA.get(studentStat.index)!=0.0}"
+                                               th:href="@{/teacher/studentScoreDetail/{stuNum}(stuNum=${student.studentNum})}">
+                                                点击查看成绩
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!--body wrapper end-->
+    </div>
+</section>
+
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<!--dynamic table-->
+<script type="text/javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization-->
+<script th:src="@{/js/dynamic_table_init.js}"></script>
+<script>
+    $(function () {
+        $("#dynamic-table_filter").hide();
+    })
+</script>
+</body>
+</html>
+
+
+<!--wangEditor代码-->
+<!--<div id="editor-div"></div>-->
+<!--<div th:replace="~{/teacher/common/common::wangEditor}"></div>-->

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>奖惩明细</title>
+    <link rel="stylesheet" th:href="@{/css/preview-article.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <div th:replace="~{/student/common::common-css}"></div>
+    <style>
+        .container {
+            width: 1000px;
+            margin: auto;
+            position: relative;
+        }
+        tr,td{
+            vertical-align: middle!important;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{/student/common::header}" class="header"></div>
+<!--内容区域开始-->
+<div class="container" style="min-height: 650px">
+    <div class="row-fluid">
+        <legend>奖惩明细</legend>
+        <hr>
+        <a class="btn btn-info" th:href="@{/student/rewardList}">返回</a>
+        <div class="span12">
+            <div class="form-group">
+                <div class="col-sm-8">
+                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                </div>
+            </div>
+            <br>
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>奖惩名称</th>
+                    <th>类型</th>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>绩点</th>
+                    <th>申请说明</th>
+                    <th>审核状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="reward:${rewardAndPunishList}" style="height: 51px" >
+                    <td th:text="${rewardStat.count}"></td>
+                    <td th:text="${reward.rewardList.name}"></td>
+                    <td th:text="${reward.rewardAndPunish.type}"></td>
+                    <td th:text="${session.loginUser.studentNum}"></td>
+                    <td th:text="${session.loginUser.name}"></td>
+                    <td th:text="${#numbers.formatDecimal(reward.gpa,0,'COMMA',2,'POINT')}"></td>
+                    <td th:text="${reward.rewardAndPunish.content}"></td>
+                    <td th:text="${reward.rewardAndPunish.state}"></td>
+                    <td>
+                        <button  th:if="${show.get(rewardStat.count-1)==1}" class="btn btn-info" style="width: 120px;">修改申请说明</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--内容区域结束-->
+<div class="banner-shadow"></div>
+<div class="footer">
+    <p>Copyright &copy; 2021 JUST All rights reserved.</p>
+</div>
+<div th:replace="~{/student/common::common-script}"></div>
+
+</body>
+</html>

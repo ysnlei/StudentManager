@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>惩罚信息管理</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            惩罚信息管理
+                        </header>
+                        <div class="panel-body">
+                            <button id="addBtn"
+                                    class="btn btn-info"
+                                    data-toggle="modal"
+                                    data-target="#myModal">
+                                新增惩罚信息
+                            </button>
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>学号</th>
+                                        <th>姓名</th>
+                                        <th>惩罚原因</th>
+                                        <th>处分决定</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="punish:${punishList}">
+                                        <td th:text="${punishStat.count}"></td>
+                                        <td th:text="${punish.rewardAndPunish.studentNum}"></td>
+                                        <td th:text="${punish.stuName}"></td>
+                                        <td th:text="${punish.rewardAndPunish.content}"></td>
+                                        <td th:text="${punish.rewardAndPunish.state}"></td>
+                                        <td>
+                                            <button th:punishId="${punish.rewardAndPunish.id}"
+                                                    class="btn btn-danger delBtn">删除
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!--body wrapper end-->
+    </div>
+</section>
+
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<!--dynamic table-->
+<script type="text/javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization-->
+<script th:src="@{/js/dynamic_table_init.js}"></script>
+<script>
+    $(function () {
+        $("#dynamic-table_filter").hide();
+    })
+</script>
+<!--        modal-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close modal_hide" data-dismiss="modal" aria-hidden="true">&times;
+                </button>
+                <h4 class="modal-title">新增惩罚</h4>
+            </div>
+
+            <div class="modal-body row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="studentNum">学号、姓名</label>
+                        <select name=studentNum"" id="studentNum" class="form-control">
+                            <option th:each="student:${studentList}"
+                                    th:value="${student.studentNum}"
+                                    th:text="${student.studentNum+' '+student.name}"
+                            ></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">惩罚原因</label>
+                        <input type="text" name="content" class="form-control" id="content">
+                    </div>
+                    <div class="form-group">
+                        <label for="state">处分决定</label>
+                        <select name="state" id="state" class="form-control">
+                            <option value="警告">警告</option>
+                            <option value="记过">记过</option>
+                            <option value="记大过">记大过</option>
+                            <option value="留校察看">留校察看</option>
+                            <option value="开除学籍">开除学籍</option>
+                        </select>
+                    </div>
+                    <div class="pull-right">
+                        <button class="btn btn-danger btn-sm modal_hide" type="button" data-dismiss="modal"
+                                aria-hidden="true">取消
+                        </button>
+                        <button class="btn btn-success btn-sm" id="confirmBtn" type="button">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#addBtn").click(function () {
+        $("#content").val("");
+    })
+    $("#confirmBtn").click(function () {
+        var studentNum = $("#studentNum").val();
+        var content = $("#content").val();
+        var state = $("#state").val();
+        $.post("/teacher/addPunish", {
+            studentNum: studentNum,
+            content: content,
+            state: state
+        }, function (data) {
+            if (data === "true") {
+                alert("添加成功")
+                window.location.reload()
+            } else {
+                alert("添加失败")
+            }
+        })
+    })
+    $(".delBtn").click(function () {
+        var id = $(this).attr("punishId");
+        if(confirm("是否确认删除？")){
+            $.post("/teacher/deletePunish", {
+                id: id
+            }, function (data) {
+                if (data === "true") {
+                    alert("删除成功")
+                    window.location.reload()
+                } else {
+                    alert("删除失败")
+                }
+            })
+        }
+    })
+
+</script>
+</body>
+</html>
+<!--        modal end-->
+
+<!--wangEditor代码-->
+<!--<div id="editor-div"></div>-->
+<!--<div th:replace="~{/teacher/common/common::wangEditor}"></div>-->

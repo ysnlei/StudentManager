@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="club.justca.studentmanager.mapper.StudentMapper">
+    <select id="findAll" resultType="student">
+        SELECT *
+        FROM `student`
+        order by `student_num`
+    </select>
+    <select id="findAllMajor" resultType="string">
+        SELECT distinct major
+        FROM `student`
+    </select>
+
+    <select id="findStudentByMajor" resultType="student">
+        SELECT *
+        FROM `student`
+        where `major` = #{major}
+    </select>
+
+    <select id="findByStudentNumAndPassword" resultType="student">
+        SELECT *
+        FROM `student`
+        where `student_num` = #{studentNum}
+          and `password` = #{password}
+    </select>
+
+    <select id="findByStudentNum" resultType="student">
+        SELECT *
+        FROM `student`
+        where `student_num` = #{studentNum}
+    </select>
+
+    <insert id="insert" parameterType="student">
+        INSERT INTO student(`id`, `student_num`, `password`, `name`, `gender`,
+                            `major`, `telephone`, `dormitory`, `duty`, `email`)
+        values (null, #{studentNum}, #{password}, #{name}, #{gender},
+                #{major}, #{telephone}, #{dormitory}, #{duty},
+                #{email})
+    </insert>
+
+    <delete id="deleteAll">
+        delete
+        from `student`
+    </delete>
+
+    <delete id="deleteByStudentNum" parameterType="string">
+        delete
+        from `student`
+        where `student_num` = #{studentNum}
+    </delete>
+
+    <update id="update" parameterType="student">
+        UPDATE `student`
+        SET `password`  = #{password},
+            `name`      = #{name},
+            `gender`    = #{gender},
+            `major`     = #{major},
+            `telephone` = #{telephone},
+            `dormitory` = #{dormitory},
+            `duty`      = #{duty},
+            `email`     = #{email}
+        WHERE `student_num` = #{studentNum}
+    </update>
+
+    <update id="resetPassword" parameterType="string">
+        UPDATE `student`
+        set `password` = '123456'
+        WHERE `student_num` = #{studentNum}
+    </update>
+</mapper>

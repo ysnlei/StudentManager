@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>学生名单</title>
+    <!--ios7-->
+    <link rel="stylesheet" type="text/css" th:href="@{/js/ios-switch/switchery.css}"/>
+
+    <!--icheck-->
+    <link th:href="@{/js/iCheck/skins/minimal/minimal.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/minimal/red.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/minimal/green.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/minimal/blue.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/minimal/yellow.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/minimal/purple.css}" rel="stylesheet">
+
+    <link th:href="@{/js/iCheck/skins/square/square.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/square/red.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/square/green.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/square/blue.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/square/yellow.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/square/purple.css}" rel="stylesheet">
+
+    <link th:href="@{/js/iCheck/skins/flat/grey.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/flat/red.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/flat/green.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/flat/blue.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/flat/yellow.css}" rel="stylesheet">
+    <link th:href="@{/js/iCheck/skins/flat/purple.css}" rel="stylesheet">
+
+    <!--multi-select-->
+    <link rel="stylesheet" type="text/css" th:href="@{/js/jquery-multi-select/css/multi-select.css}"/>
+
+    <!--file upload-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-fileupload.min.css}"/>
+
+    <!--tags input-->
+    <link rel="stylesheet" type="text/css" th:href="@{/js/jquery-tags-input/jquery.tagsinput.css}"/>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            学生基本信息管理
+                        </header>
+                        <div class="panel-body">
+                            <div th:if="${session.loginUser.manageMajor!='0'}" class="fileupload fileupload-new" data-provides="fileupload">
+                                <span class="btn btn-default btn-file">
+                                <span class="fileupload-new"><i class="fa fa-paper-clip"></i> 上传学生名单</span>
+                                <span class="fileupload-exists"><i class="fa fa-undo"></i> 重新选择</span>
+                                <input id="stuExcel" type="file" class="btn btn-info"/>
+                                </span>
+                                <span class="fileupload-preview" style="margin-left:5px;"></span>
+                                <a href="#" class="close fileupload-exists" data-dismiss="fileupload"
+                                   style="float: none; margin-left:5px;"></a>
+                            </div>
+
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th class="sorting_desc">学号</th>
+                                        <th>姓名</th>
+                                        <th>性别</th>
+                                        <th>专业</th>
+                                        <th>电话</th>
+                                        <th>宿舍</th>
+                                        <th>职务</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="student:${studentList}">
+                                        <td th:text="${studentStat.count}"></td>
+                                        <td th:text="${student.studentNum}"></td>
+                                        <td th:text="${student.name}"></td>
+                                        <td th:text="${student.gender}"></td>
+                                        <td th:text="${student.major}"></td>
+                                        <td th:text="${student.telephone}"></td>
+                                        <td th:text="${student.dormitory}"></td>
+                                        <td th:text="${student.duty}"></td>
+                                        <td>
+                                            <a class="btn btn-success"
+                                               th:href="@{/teacher/studentUpdate/{studentNum}(studentNum=${student.studentNum})}">修改</a>
+                                            <button th:stuNum="${student.studentNum}" class="btn btn-danger stuDel">删除
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!--body wrapper end-->
+    </div>
+</section>
+
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<!--dynamic table-->
+<script type="text/javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization-->
+<script th:src="@{/js/dynamic_table_init.js}"></script>
+<script>
+    $(function () {
+        $("#dynamic-table_filter").hide();
+    })
+</script>
+
+<!--ios7-->
+<script th:src="@{/js/ios-switch/switchery.js}"></script>
+<script th:src="@{/js/ios-switch/ios-init.js}"></script>
+
+<!--icheck -->
+<script th:src="@{/js/iCheck/jquery.icheck.js}"></script>
+<script th:src="@{/js/icheck-init.js}"></script>
+<!--multi-select-->
+<script type="text/javascript" th:src="@{/js/jquery-multi-select/js/jquery.multi-select.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-multi-select/js/jquery.quicksearch.js}"></script>
+<script th:src="@{/js/multi-select-init.js}"></script>
+<!--spinner-->
+<script type="text/javascript" th:src="@{/js/fuelux/js/spinner.min.js}"></script>
+<script th:src="@{/js/spinner-init.js}"></script>
+<!--file upload-->
+<script type="text/javascript" th:src="@{/js/bootstrap-fileupload.min.js}"></script>
+<!--tags input-->
+<script th:src="@{/js/jquery-tags-input/jquery.tagsinput.js}"></script>
+<script th:src="@{/js/tagsinput-init.js}"></script>
+<!--bootstrap input mask-->
+<script type="text/javascript" th:src="@{/js/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
+<script>
+    $("#stuExcel").change(function () {
+        let formData = new FormData();
+        formData.append("fileUpload", this.files[0]);
+        $.ajax({
+            url: "[[@{/backend/upload/excel_upload}]]",
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                if (data.status === "success") {
+                    alert("上传成功")
+                    location.reload(true);
+                } else {
+                    alert("上传失败")
+                }
+            },
+            error: function (data) {
+                alert("上传失败")
+            }
+        });
+    })
+</script>
+<!--删除操作的js-->
+<script>
+    $(".stuDel").click(function () {
+        let studentNum = $(this).attr("stuNum");
+        if (confirm("是否确认删除？")) {
+            $.post("/teacher/studentDelete",
+                {
+                    studentNum: studentNum
+                },
+                function (data, status) {
+                    if (data === "true") {
+                        alert("删除成功");
+                        window.location.href = "/teacher/studentList";
+                    } else {
+                        alert("删除失败")
+                    }
+                });
+        }
+    })
+</script>
+</body>
+</html>
+
+
+<!--wangEditor代码-->
+<!--<div id="editor-div"></div>-->
+<!--<div th:replace="~{/teacher/common/common::wangEditor}"></div>-->

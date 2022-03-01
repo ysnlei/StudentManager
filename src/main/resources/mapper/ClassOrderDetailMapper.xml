@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="club.justca.studentmanager.mapper.ClassOrderDetailMapper">
+    <select id="findAll" resultType="classOrderDetail">
+        SELECT *
+        FROM `class_order_detail`
+        order by update_time desc;
+    </select>
+
+    <select id="findById" resultType="classOrderDetail">
+        SELECT *
+        FROM `class_order_detail`
+        where id = #{id};
+    </select>
+
+    <select id="findByMajor" resultType="classOrderDetail">
+        SELECT *
+        FROM `class_order_detail`
+        where order_major = #{major}
+        order by update_time desc;
+    </select>
+
+    <select id="findByStatus" resultType="classOrderDetail">
+        SELECT *
+        FROM `class_order_detail`
+        where status = #{status}
+        order by update_time desc;
+    </select>
+
+    <select id="findByClassroomId" resultType="classOrderDetail">
+        SELECT *
+        FROM `class_order_detail`
+        where classroom_id = #{classroomId}
+        order by update_time desc;
+    </select>
+
+    <select id="findByClassroomIdAndOrderTime" resultType="classOrderDetail">
+        SELECT *
+        FROM `class_order_detail`
+        where classroom_id = #{classroomId}
+          and order_time = #{orderTime};
+    </select>
+
+    <update id="update" parameterType="classOrderDetail">
+        UPDATE `class_order_detail`
+        SET classroom_id = #{classroomId},
+            order_major  = #{orderMajor},
+            order_user   = #{orderUser},
+            order_time   = #{orderTime},
+            update_time  = #{updateTime},
+            status       = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insert" parameterType="classOrderDetail">
+        INSERT INTO `class_order_detail`
+        (id, classroom_id, order_major, order_user, order_time, update_time, status)
+        values (NULL, #{classroomId}, #{orderMajor}, #{orderUser}, #{orderTime}, #{updateTime}, #{status})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE
+        FROM `class_order_detail`
+        WHERE id = #{id}
+    </delete>
+</mapper>

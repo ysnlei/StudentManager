@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>缴费明细</title>
+    <link rel="stylesheet" th:href="@{/css/preview-article.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <div th:replace="~{/student/common::common-css}"></div>
+    <style>
+        .container {
+            width: 1000px;
+            margin: auto;
+            position: relative;
+        }
+        tr,td{
+            vertical-align: middle!important;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{/student/common::header}" class="header"></div>
+<!--内容区域开始-->
+<div class="container" style="min-height: 650px">
+    <div class="row-fluid">
+        <legend>缴费明细</legend>
+        <hr>
+        <a class="btn btn-info" th:href="@{/student/fundList}">返回</a>
+        <div class="span12">
+            <div class="form-group">
+                <div class="col-sm-8">
+                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                </div>
+            </div>
+            <br>
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>缴费主题</th>
+                    <th>订单号</th>
+                    <th>商户号</th>
+                    <th>支付状态</th>
+                    <th>支付时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="classFundDetail:${classFundDetailList}" style="height: 51px" >
+                    <td th:text="${classFundDetailStat.count}"></td>
+                    <td th:text="${session.loginUser.studentNum}"></td>
+                    <td style="width: 80px;" th:text="${session.loginUser.name}"></td>
+                    <td style="width: 80px;" th:text="${titleList.get(classFundDetailStat.count-1)}"></td>
+                    <td th:text="${classFundDetail.tradeNo}"></td>
+                    <td th:text="${classFundDetail.outTradeNo}"></td>
+                    <td style="width: 80px;" th:text="${classFundDetail.status}"></td>
+                    <td th:text="${#dates.format(classFundDetail.payTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--内容区域结束-->
+<div class="banner-shadow"></div>
+<div class="footer">
+    <p>Copyright &copy; 2021 JUST All rights reserved.</p>
+</div>
+<div th:replace="~{/student/common::common-script}"></div>
+
+</body>
+</html>

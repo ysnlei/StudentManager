@@ -1,0 +1,46 @@
+.headerLogo{
+    display: inline-block;
+}
+.header {
+    height: 84px;
+    margin: 26px auto;
+    overflow: hidden;
+    position: relative;
+    width: 1000px;
+    z-index: 2;
+}
+
+.headerNav {
+    right: 190px;
+    text-align: right;
+    top: 40px;
+    position: absolute;
+}
+
+.headerNav a {
+    color: #515151;
+    padding: 0 5px;
+    font-size: 18px;
+}
+
+.headerNav a:hover {
+    color: rgb(0, 91, 172);
+}
+
+.headerNav .active{
+    color: rgb(0, 91, 172);
+}
+
+.login-info .logout{
+    color:mediumblue
+}
+
+.login-info{
+    position: absolute;
+    top: 45px;
+    right: 20px;
+}
+.banner{
+    width: 1000px;
+    margin: auto;
+}

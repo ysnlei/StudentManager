@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="club.justca.studentmanager.mapper.ClassFundDetailMapper">
+    <select id="findAll" resultType="classFundDetail">
+        SELECT *
+        FROM `class_fund_detail`;
+    </select>
+
+    <select id="findByClassFundListIdAndStudentNum" resultType="classFundDetail">
+        SELECT *
+        from `class_fund_detail`
+        where class_fund_list_id = #{classFundListId}
+          and student_num = #{studentNum}
+    </select>
+
+    <select id="findByStudentNum" resultType="classFundDetail">
+        SELECT *
+        from `class_fund_detail`
+        where student_num = #{studentNum}
+    </select>
+
+    <select id="findByTradeNo" resultType="classFundDetail">
+        SELECT *
+        from `class_fund_detail`
+        where trade_no = #{tradeNo}
+    </select>
+
+    <select id="findByOutTradeNo" resultType="classFundDetail">
+        SELECT *
+        from `class_fund_detail`
+        where out_trade_no = #{outTradeNo}
+    </select>
+
+    <select id="findByClassFundListId" resultType="classFundDetail">
+        SELECT *
+        from `class_fund_detail`
+        where class_fund_list_id = #{classFundListId}
+    </select>
+
+    <update id="update" parameterType="classFundDetail">
+        UPDATE `class_fund_detail`
+        SET class_fund_list_id = #{classFundListId},
+            student_num        = #{studentNum},
+            trade_no           = #{tradeNo},
+            out_trade_no       = #{outTradeNo},
+            status             = #{status},
+            pay_time           = #{payTime}
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insert" parameterType="classFundDetail">
+        INSERT INTO `class_fund_detail`(id, class_fund_list_id, student_num, trade_no, out_trade_no, status, pay_time)
+        values (NULL, #{classFundListId}, #{studentNum}, #{tradeNo}, #{outTradeNo}, #{status}, #{payTime})
+    </insert>
+
+</mapper>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>文章预览</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <link rel="stylesheet" th:href="@{/css/preview-article.css}"/>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+
+        <!--内容区域开始-->
+        <div class="panel-body">
+            <div class="title" th:text="${notice.title}">文章标题</div>
+            <div class="spacer"></div>
+            <div class="article-detail">
+                作者：<span th:text="${notice.author}">张三</span>
+                创作日期：<span th:text="${#dates.format(notice.createTime, 'yyyy-MM-dd')}">2020-09-18</span>
+            </div>
+            <div class="article" th:utext="${notice.article}"></div>
+            <a th:href="${notice.attachment}" th:if="${notice.attachment!=null&&!notice.attachment.isEmpty()}">点击下载附件</a>
+        </div>
+        <!--内容区域结束-->
+    </div>
+    <!-- main content end-->
+</section>
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+</body>
+</html>

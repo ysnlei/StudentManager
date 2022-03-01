@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>管理员信息管理</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            管理员信息管理
+                        </header>
+                        <div class="panel-body">
+                            <a th:href="@{/teacher/teacherAdd}" class="btn-info btn">添加教师</a>
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>教师号</th>
+                                        <th>姓名</th>
+                                        <th>性别</th>
+                                        <th>管理专业</th>
+                                        <th>邮箱</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="teacher:${teacherList}">
+                                        <td th:text="${teacherStat.count}"></td>
+                                        <td th:text="${teacher.teacherNum}"></td>
+                                        <td th:text="${teacher.name}"></td>
+                                        <td th:text="${teacher.gender}"></td>
+                                        <td th:text="${teacher.manageMajor}"></td>
+                                        <td th:text="${teacher.email}"></td>
+                                        <td style="width: 200px">
+                                            <a class="btn btn-info" th:href="@{/teacher/teacherUpdate/{teacherNum}(teacherNum=${teacher.teacherNum})}">修改</a>
+                                            <button class="btn btn-danger delBtn" th:teacherNum="${teacher.teacherNum}">删除</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<!--dynamic table-->
+<script type="text/javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization-->
+<script th:src="@{/js/dynamic_table_init.js}"></script>
+<script>
+    $(function () {
+        $("#dynamic-table_filter").hide();
+    })
+
+    $(".delBtn").click(function () {
+        if(confirm("是否确认删除？")){
+            let teacherNum = $(this).attr("teacherNum");
+            $.post("/teacher/deleteTeacher",
+                {
+                    teacherNum: teacherNum
+                },
+                function (data, status) {
+                    if (data === "true") {
+                        alert("删除成功！")
+                        window.location.href = "/teacher/teacherManage";
+                    } else {
+                        alert("删除失败!")
+                    }
+                });
+        }
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>已发布校历</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+    <link rel="stylesheet" th:href="@{/js/data-tables/DT_bootstrap.css}"/>
+    <style>
+        th {
+            text-align: center;
+        }
+
+        td {
+            vertical-align: middle !important;
+            text-align: center !important;
+        }
+    </style>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            已发布校历管理
+                        </header>
+                        <div class="panel-body">
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>年份</th>
+                                        <th>校历图片</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="schoolYear:${schoolYearList}">
+                                        <td th:text="${schoolYearStat.count}"></td>
+                                        <td th:text="${schoolYear.year}"></td>
+                                        <td>
+                                            <a target="_blank" th:href="${schoolYear.photoUrl}">
+                                                <img style="height: 220px;" th:src="${schoolYear.photoUrl}" alt="">
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-success"
+                                               th:href="@{/teacher/updateSchoolYear/{id}(id=${schoolYear.id})}">
+                                                修改
+                                            </a>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <button class="btn btn-danger deleteBtn"
+                                                    th:schoolYearId="${schoolYear.id}">
+                                                删除
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!--body wrapper end-->
+    </div>
+</section>
+
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<!--dynamic table-->
+<script type="text/javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization-->
+<script th:src="@{/js/dynamic_table_init.js}"></script>
+<script>
+    $(function () {
+        $("#dynamic-table_filter").hide();
+    })
+    $(".deleteBtn").click(function () {
+        let schoolYearId = $(this).attr("schoolYearId");
+        if (confirm("是否确认删除？")) {
+            $.post("/teacher/schoolYearDelete",
+                {
+                    id: schoolYearId
+                },
+                function (data, status) {
+                    if (data === "true") {
+                        alert("删除成功");
+                        window.location.href = "/teacher/schoolYearManage";
+                    } else {
+                        alert("删除失败")
+                    }
+                });
+        }
+    })
+</script>
+</body>
+</html>
+
+
+<!--wangEditor代码-->
+<!--<div id="editor-div"></div>-->
+<!--<div th:replace="~{/teacher/common/common::wangEditor}"></div>-->

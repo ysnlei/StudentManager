@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="club.justca.studentmanager.mapper.LeaveMapper">
+
+    <!-- 配置查询所有 ,写完就不用写实现类了-->
+    <select id="findAll" resultType="leave">
+        SELECT *
+        FROM `leave` order by id desc ;
+    </select>
+
+    <select id="findByPage" resultType="leave">
+        SELECT *
+        from `leave`
+        order by id desc
+        limit #{offset},#{rows}
+    </select>
+
+    <select id="findById" resultType="leave">
+        SELECT *
+        from `leave`
+        where id = #{id}
+    </select>
+
+    <select id="findByStudentNum" resultType="leave">
+        SELECT *
+        from `leave`
+        where student_num = #{studentNum}  order by id desc;
+    </select>
+
+    <select id="findByState" resultType="leave">
+        SELECT *
+        FROM `leave`
+        where state = #{state}
+    </select>
+
+    <delete id="deleteAll">
+        delete
+        from `leave`
+    </delete>
+
+    <delete id="deleteById" parameterType="integer">
+        delete
+        from `leave`
+        where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="leave">
+        UPDATE `leave`
+        SET student_num   = #{studentNum},
+            reason        = #{reason},
+            start_time    = #{startTime},
+            end_time      = #{endTime},
+            state         = #{state},
+            refuse_reason = #{refuseReason}
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insert" parameterType="leave">
+        INSERT INTO `leave`(id, student_num, reason, start_time, end_time, state, refuse_reason)
+        values (NULL, #{studentNum}, #{reason}, #{startTime}, #{endTime}, #{state}, #{refuseReason})
+    </insert>
+
+</mapper>

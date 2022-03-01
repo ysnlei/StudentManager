@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>可申请奖项</title>
+    <link rel="stylesheet" th:href="@{/css/preview-article.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <div th:replace="~{/student/common::common-css}"></div>
+    <style>
+        .container {
+            width: 1000px;
+            margin: auto;
+            position: relative;
+        }
+
+        tr, td {
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{/student/common::header}" class="header"></div>
+<!--内容区域开始-->
+<div class="container" style="min-height: 650px">
+    <div class="row-fluid">
+        <legend>申请奖励</legend>
+        <hr>
+        <a class="btn btn-success" th:href="@{/student/rewardDetail}">查看奖励明细</a>
+        <a class="btn btn-info" th:href="@{/student/punishDetail}">查看惩罚明细</a>
+        <div class="span12">
+            <div class="form-group">
+                <div class="col-sm-8">
+                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                </div>
+            </div>
+            <br>
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>奖励名称</th>
+                    <th>最低绩点要求</th>
+                    <th>申请开始时间</th>
+                    <th>申请结束时间</th>
+                    <th>申请说明</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="reward:${rewardList}" style="height: 51px">
+                    <td th:text="${rewardStat.count}"></td>
+                    <td th:text="${reward.name}"></td>
+                    <td th:text="${reward.gpa}"></td>
+                    <td th:text="${#dates.format(reward.startTime, 'yyyy-MM-dd')}"></td>
+                    <td style="width: 200px;" th:text="${#dates.format(reward.endTime, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${reward.explain}"></td>
+                    <td>
+                        <button th:if="${show.get(rewardStat.count-1)==1}" class="btn btn-info applyBtn" type="button" th:rewardId="${reward.id}"
+                                data-toggle="modal" data-target="#myModal">申请
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--内容区域结束-->
+<!--模态框-->
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">申请奖励</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="content" class="control-label">申请说明:</label>
+                        <br>
+                        <br>
+                        <textarea name="content" class="form-control" id="content" rows="6"></textarea>
+                        <input type="hidden" name="rewardId" id="rewardId">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="quxiao" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" id="applyConfirm" class="btn btn-primary">确认申请</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="banner-shadow"></div>
+
+<div class="footer">
+    <p>Copyright &copy; 2021 JUST All rights reserved.</p>
+</div>
+<div th:replace="~{/student/common::common-script}"></div>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script>
+    $(".applyBtn").click(function () {
+        $("#rewardId").val($(this).attr("rewardId"));
+        $("#content").val("")
+    })
+
+    $("#applyConfirm").click(function () {
+        let rewardId = $("#rewardId").val();
+        let content = $("#content").val();
+        if (confirm("是否确认申请？")) {
+            $.post("/student/applyReward", {
+                rewardId: rewardId,
+                content: content
+            }, function (data) {
+                console.log(data)
+                if (data === 1) {
+                    alert("申请成功")
+                    $('#myModal').modal('hide')
+                    window.location.reload();
+                } else if (data === 2) {
+                    alert("申请失败")
+                } else if (data === 3) {
+                    alert("请勿重复申请");
+                }else if(data===4){
+                    alert("已超过申请时间，无法继续申请");
+                } else {
+                    window.location.href("/login")
+                }
+            })
+        }
+    })
+</script>
+</body>
+</html>

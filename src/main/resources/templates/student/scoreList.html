@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>成绩明细</title>
+    <link rel="stylesheet" th:href="@{/css/preview-article.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <div th:replace="~{/student/common::common-css}"></div>
+    <style>
+        .container {
+            width: 1000px;
+            margin: auto;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{/student/common::header}" class="header"></div>
+<!--内容区域开始-->
+<div class="container" style="min-height: 650px">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="form-group">
+                <button class="col-sm-2 btn btn-info" id="getScore">从教务系统爬取成绩</button>
+                <div class="col-sm-8">
+                    <input id="jiaowuPWD" type="password"
+                           placeholder="请输入教务密码"
+                           name="jiaowuPWD" class="form-control">
+                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <span th:if="${listSize==0}" style="color: red">请先爬取成绩！</span>
+            <span th:if="${listSize!=0}"
+                  th:text="${'平均绩点：'+#numbers.formatDecimal(gpa,0,'COMMA',2,'POINT')}">
+            </span>
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th class="sorting_desc">学号</th>
+                    <th>学期</th>
+                    <th>课程号</th>
+                    <th>课程名称</th>
+                    <th>成绩</th>
+                    <th>学分</th>
+                    <th>课时</th>
+                    <th>考查方式</th>
+                    <th>课程性质</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="score:${scoreList}" style="height: 51px">
+                    <td th:text="${scoreStat.count}"></td>
+                    <td th:text="${score.studentNum}"></td>
+                    <td th:text="${score.courseTerm}"></td>
+                    <td th:text="${score.courseNum}"></td>
+                    <td style="width: 200px;" th:text="${score.courseName}"></td>
+                    <td th:text="${score.score}"></td>
+                    <td th:text="${score.courseCredit}"></td>
+                    <td th:text="${score.courseHour}"></td>
+                    <td th:text="${score.examination}"></td>
+                    <td th:text="${score.courseNature}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--内容区域结束-->
+
+<div class="banner-shadow"></div>
+
+<div class="footer">
+    <p>Copyright &copy; 2021 JUST All rights reserved.</p>
+</div>
+<div th:replace="~{/student/common::common-script}"></div>
+<script>
+    $("#getScore").click(function (){
+        var jwpwd = $("#jiaowuPWD").val();
+        if(jwpwd===""){
+            alert("请输入教务密码");
+            return;
+        }
+        $.post("/student/getScore",{
+            jwpwd:jwpwd
+        },function (data){
+            if(data==="true"){
+                alert("成绩更新成功")
+                window.location.reload();
+            }else {
+                alert("成绩更新失败")
+            }
+        });
+    })
+</script>
+</body>
+</html>

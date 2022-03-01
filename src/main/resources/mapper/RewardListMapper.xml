@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="club.justca.studentmanager.mapper.RewardListMapper">
+    <select id="findAll" resultType="rewardList">
+        select *
+        from reward_list
+    </select>
+
+    <select id="findByPage" resultType="rewardList">
+        select *
+        from reward_list
+        limit #{offset},#{rows}
+    </select>
+
+    <select id="findByMajor" resultType="rewardList">
+        select *
+        from reward_list
+        where major = #{major}
+    </select>
+
+    <select id="findById" resultType="rewardList">
+        select *
+        from reward_list
+        where id = #{id};
+    </select>
+    <delete id="deleteAll">
+        delete
+        from reward_list
+    </delete>
+    <delete id="deleteById">
+        delete
+        from reward_list
+        where id = #{id}
+    </delete>
+    <insert id="insert" parameterType="rewardList">
+        INSERT INTO `reward_list`(`id`, `name`, `gpa`, `start_time`, `end_time`, `explain`)
+        values (NULL, #{name}, #{gpa}, #{startTime}, #{endTime}, #{explain})
+    </insert>
+    <update id="update" parameterType="rewardList">
+        UPDATE `reward_list`
+        SET `name`       = #{name},
+            `gpa`        = #{gpa},
+            `start_time` = #{startTime},
+            `end_time`   = #{endTime},
+            `explain`    = #{explain}
+        WHERE `id` = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,63 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>通知</title>
+    <div th:replace="~{/student/common::common-css}"></div>
+    <link rel="stylesheet" th:href="@{/css/article-list.css}">
+</head>
+
+<body id="myBody">
+<div th:replace="~{/student/common::header}" class="header"></div>
+
+<div class="banner">
+    <div class="notice-title">
+        <div class="notice-title-1">通&nbsp;&nbsp;知</div>
+        <div class="notice-title-2"></div>
+    </div>
+    <div>
+        <ul class="article-list">
+            <li th:each="notice:${noticeList}">
+                <span>
+                    <img th:src="@{/images/youjiantou_1.png}" height="15px" alt="">
+                </span>
+                <a th:href="@{/student/notice/{id}(id=${notice.id})}" th:text="${notice.title}"></a>
+                <span class="article-time" th:text="${#dates.format(notice.createTime, 'yyyy-MM-dd')}"></span>
+            </li>
+        </ul>
+        <div class="pageShow">
+            <ul>
+                <li>
+                    <span class="per_page">每页&nbsp;<em class="per_count" th:text="${size}+'&nbsp;记录&nbsp;'"></em></span>
+                    <span class="all_count" th:utext="${'总共&nbsp;<em>'+totalArticle+'</em>&nbsp;条记录&nbsp;'}"></span>
+                </li>
+                <li class="page_nav">
+                    <a class="first" target="_self"><span th:text="${'第 '+localPage+' 页'}"></span></a>
+                    <a class="prev"
+                       th:if="${localPage>=2}"
+                       th:href="@{/student/noticeList(page=${localPage}-1,size=${size})}"
+                       target="_self"><span>&lt;&lt;上一页</span></a>
+                    <a th:each="count:${#numbers.sequence(1,totalPage)}"
+                       th:class="${localPage==count?'active':''}"
+                       th:href="@{/student/noticeList(page=${count},size=${size})}"
+                       th:text="${count+'&nbsp;&nbsp;'}"></a>
+                    <a class="next" th:if="${localPage<totalPage}"
+                       th:href="@{/student/noticeList(page=${localPage}+1,size=${size})}"
+                       target="_self"><span>下一页&gt;&gt;</span></a>
+                    <a class="last" th:if="${localPage!=totalPage}" th:href="@{/student/noticeList(page=${totalPage},size=${size})}" target="_self"><span>尾页</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="banner-shadow"></div>
+
+<div class="footer">
+    <p>Copyright &copy; 2021 JUST All rights reserved.</p>
+</div>
+<div th:replace="~{/student/common::common-script}"></div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>成绩明细</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            学生成绩查询
+                        </header>
+                        <div class="panel-body">
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th class="sorting_desc">学号</th>
+                                        <th>学期</th>
+                                        <th>课程号</th>
+                                        <th>课程名称</th>
+                                        <th>成绩</th>
+                                        <th>学分</th>
+                                        <th>课时</th>
+                                        <th>考查方式</th>
+                                        <th>课程性质</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="score:${scoreList}">
+                                        <td th:text="${scoreStat.count}"></td>
+                                        <td th:text="${score.studentNum}"></td>
+                                        <td th:text="${score.courseTerm}"></td>
+                                        <td th:text="${score.courseNum}"></td>
+                                        <td th:text="${score.courseName}"></td>
+                                        <td th:text="${score.score}"></td>
+                                        <td th:text="${score.courseCredit}"></td>
+                                        <td th:text="${score.courseHour}"></td>
+                                        <td th:text="${score.examination}"></td>
+                                        <td th:text="${score.courseNature}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!--body wrapper end-->
+    </div>
+</section>
+
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+</body>
+</html>

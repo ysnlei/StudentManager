@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生端公共部分</title>
+</head>
+<body>
+<!--公共css开始-->
+<div th:fragment="common-css">
+    <link th:href="@{/css/login.css}" rel="stylesheet" rev="stylesheet" type="text/css" media="all"/>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+</div>
+
+<!--公共js开始-->
+<div th:fragment="common-script">
+    <script th:src="@{/js/jquery-1.10.2.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.SuperSlide.js}"></script>
+    <script type="text/javascript" th:src="@{/js/login.js}"></script>
+</div>
+<!--公共js结束-->
+
+<!--公共头开始-->
+<div th:fragment="header" class="header">
+    <h1 class="headerLogo">
+        <img alt="logo" width="320" th:src="@{/images/logo.png}">
+    </h1>
+    <div class="headerNav">
+        <a th:class="${page=='index'?'active':''}" th:href="@{/student/index}">首页</a>
+        <a th:class="${page=='notice'?'active':''}" th:href="@{/student/noticeList}">通知</a>
+        <a th:class="${page=='schoolYear'?'active':''}" th:href="@{/student/schoolYearList}">校历</a>
+        <a th:class="${page=='score'?'active':''}" th:href="@{/student/score}">成绩查询</a>
+        <a th:class="${page=='reward'?'active':''}" th:href="@{/student/rewardList}">奖励申请</a>
+        <a th:class="${page=='leave'?'active':''}" th:href="@{/student/leaveList}">请销假</a>
+        <a th:class="${page=='fund'?'active':''}" th:href="@{/student/fundList}">班费缴纳</a>
+    </div>
+    <span class="login-info">
+        欢迎您：<a th:href="@{/student/info}"><span th:text="${session.loginUser.name}"></span></a>
+        &nbsp;&nbsp;
+        <a class="logout" href="/logout">注销</a>
+    </span>
+</div>
+<!--公共头结束-->
+<div th:replace="~{/student/common::common-script}"></div>
+</body>
+</html>
+

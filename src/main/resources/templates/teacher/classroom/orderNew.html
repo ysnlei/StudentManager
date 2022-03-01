@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>教室预约</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            教室预约
+                        </header>
+                        <div class="panel-body">
+                            <h4>教室信息筛选</h4>
+                            <br>
+                            <div class="col-sm-1"
+                                 style="height: 34px;text-align: right;font-size: 16px;line-height: 34px">
+                                <span>日期：</span>
+                            </div>
+                            <div class="col-sm-3">
+                                <select name="" class="form-control" id="date">
+                                    <option value="all">--请选择--</option>
+                                    <option value="" id="date1"></option>
+                                    <option value="" id="date2"></option>
+                                    <option value="" id="date3"></option>
+                                    <option value="" id="date4"></option>
+                                    <option value="" id="date5"></option>
+                                    <option value="" id="date6"></option>
+                                    <option value="" id="date7"></option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1"
+                                 style="height: 34px;text-align: right;font-size: 16px;line-height: 34px">
+                                <span>时间段：</span>
+                            </div>
+                            <div class="col-sm-3">
+                                <select name="" class="form-control" id="time">
+                                    <option value="all">--请选择--</option>
+                                    <option value="8:00-9:40">8：00 - 9：40</option>
+                                    <option value="10:00-11:40">10：00 - 11：40</option>
+                                    <option value="14:00-15:40">14：00 - 15：40</option>
+                                    <option value="16:00-17:40">16：00 - 17：40</option>
+                                    <option value="19:00-20:40">19：00 - 20：40</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1">
+                                <button class="btn btn-info" id="searchBtn">查询</button>
+                            </div>
+                            <div class="col-sm-3">
+                                <span id="error-span" style="color: red"></span>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>楼号</th>
+                                        <th>楼层</th>
+                                        <th>教室号</th>
+                                        <th>预约时间段</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="classroom:${classroomCanOrderList}">
+                                        <td th:text="${classroomStat.count}"></td>
+                                        <td th:text="${buildingName.get(classroomStat.count-1)}"></td>
+                                        <td th:text="${classroom.floor}"></td>
+                                        <td th:text="${classroom.classroomName}"></td>
+                                        <td th:text="${orderTime}"></td>
+                                        <td style="width: 200px">
+                                            <button class="btn btn-success orderBtn"
+                                                    th:classroomId="${classroom.id}"
+                                                    th:orderTime="${orderTime}">
+                                                预约
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<!--dynamic table-->
+<script type="text/javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization-->
+<script th:src="@{/js/dynamic_table_init.js}"></script>
+<script>
+    function getTime(day) {
+        var lw = new Date(new Date() - 1000 * 60 * 60 * 24 * day);//最后一个数字30可改，30天的意思
+        var lastY = lw.getFullYear();
+        var lastM = lw.getMonth() + 1;
+        var lastD = lw.getDate();
+        var startdate = lastY + "年" + (lastM < 10 ? "0" + lastM : lastM) + "月" + (lastD < 10 ? "0" + lastD : lastD) + "日";//三十天之前日期
+        return startdate
+    }
+
+    $(function () {
+        for (var i = 0; i < 7; i++) {
+            $("#date" + (i + 1)).val(getTime(-1 * i));
+            $("#date" + (i + 1)).text(getTime(-1 * i));
+        }
+    })
+    $(function () {
+        $("#dynamic-table_filter").hide();
+    })
+
+    $("#searchBtn").click(function () {
+        var str1 = $("#date option:selected").val()
+        var str2 = $("#time option:selected").val();
+        if (str1 === "all" || str2 === "all") {
+            $("#error-span").text("参数错误！")
+        } else {
+            var str = str1 + ' ' + str2
+            window.location.href = "/teacher/orderNew?orderTime=" + str;
+        }
+    })
+
+    $(".orderBtn").click(function () {
+        let classroomId = $(this).attr("classroomId")
+        let orderTime = $(this).attr("orderTime")
+        // console.log(classroomId+' '+orderTime)
+        if(confirm("是否确认预约此教室？")){
+            $.post("/teacher/addNewOrder",
+                {
+                    classroomId: classroomId,
+                    orderTime: orderTime
+                },
+                function (data, status) {
+                    if (data === "true") {
+                        alert("预约成功！")
+                        window.location.href = "/teacher/classroomOrder";
+                    } else {
+                        alert("预约失败!")
+                    }
+                });
+        }
+    })
+</script>
+</body>
+</html>

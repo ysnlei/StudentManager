@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>新增管理员</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            添加管理员信息
+                        </header>
+                        <div class="panel-body">
+                            <form class="form-horizontal adminex-form" method="get" onsubmit="return false">
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label">教师号</label>
+                                    <div class="col-sm-8">
+                                        <input id="teacherNum" type="text"
+                                               name="teacherNum" class="form-control">
+                                        <div class="col-sm-2 col-sm-2 control-label"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label">姓名</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="teacherName" name="name"
+                                               class="form-control">
+                                    </div>
+                                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label">性别</label>
+                                    <div class="col-sm-8">
+                                        <input id="gender-man" checked type="radio"
+                                               name="gender" value="男"> 男
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input id="gender-woman" type="radio"
+                                               name="gender" value="女"> 女
+                                    </div>
+                                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="manageMajor" class="col-sm-2 col-sm-2 control-label">管理专业</label>
+                                    <div class="col-sm-8">
+                                        <input id="manageMajor" type="text"
+                                               name="major" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label">邮箱</label>
+                                    <div class="col-sm-8">
+                                        <input id="email" type="text"
+                                               name="email" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                                    <div class="col-sm-8">
+                                        <button id="updateBtn" class="btn btn-info">&nbsp;&nbsp;&nbsp;添加&nbsp;&nbsp;&nbsp;</button>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a class="btn btn-default" th:href="@{/teacher/teacherManage}">&nbsp;&nbsp;&nbsp;取消&nbsp;&nbsp;&nbsp;</a>
+                                    </div>
+                                    <div class="col-sm-2 col-sm-2 control-label"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!--body wrapper end-->
+    </div>
+</section>
+
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<script>
+    $("#updateBtn").click(function () {
+        let teacherNum = $("#teacherNum").val();
+        let name = $("#teacherName").val();
+        let gender = ""
+        if ($("#gender-man").attr("checked") === "checked") {
+            gender = "男"
+        } else {
+            gender = "女"
+        }
+
+        let manageMajor = $("#manageMajor").val();
+        console.log(manageMajor)
+        let email = $("#email").val();
+
+        if (confirm("是否确认添加？")) {
+            $.post("/teacher/insertTeacher",
+                {
+                    teacherNum: teacherNum,
+                    name: name,
+                    gender: gender,
+                    manageMajor: manageMajor,
+                    email: email
+                },
+                function (data, status) {
+                    if (data === "true") {
+                        alert("添加成功！");
+                        window.location.href = "/teacher/teacherManage";
+                    } else {
+                        alert("添加失败！")
+                    }
+                });
+        }
+    })
+
+    $("#resetPwd").click(function () {
+        let teacherNum = $("#teacherNum").val();
+        if (confirm("是否确认重置密码为123456？")) {
+            $.post("/teacher/resetTeacherPwd",
+                {
+                    teacherNum: teacherNum,
+                },
+                function (data, status) {
+                    if (data === "true") {
+                        alert("重置成功，请提醒管理员尽快修改密码!");
+                    } else {
+                        alert("修改失败！")
+                    }
+                });
+        }
+    })
+</script>
+</body>
+</html>

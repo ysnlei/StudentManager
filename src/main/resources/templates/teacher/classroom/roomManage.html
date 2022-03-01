@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>教室管理</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            [[${buildingName}]]教室管理
+                        </header>
+                        <div class="panel-body">
+                            <!--添加按钮-->
+                            <button th:buildingId="${buildingId}"
+                                    data-toggle="modal"
+                                    data-target="#myModal"
+                                    class="btn-info btn" id="addBtn">添加教室
+                            </button>
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>教学楼名</th>
+                                        <th>楼层</th>
+                                        <th>教室号</th>
+                                        <th>人数</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="classroom:${classroomList}">
+                                        <td th:text="${classroomStat.count}"></td>
+                                        <td th:text="${buildingName}"></td>
+                                        <td th:text="${classroom.floor}"></td>
+                                        <td th:text="${classroom.classroomName}"></td>
+                                        <td th:text="${classroom.peopleNum}"></td>
+                                        <td style="width: 200px">
+                                            <button class="btn btn-info updateBtn"
+                                                    th:classroomId="${classroom.id}"
+                                                    th:buildingId="${buildingId}"
+                                                    th:floor="${classroom.floor}"
+                                                    th:peopleNum="${classroom.peopleNum}"
+                                                    th:classroomName="${classroom.classroomName}"
+                                                    data-toggle="modal"
+                                                    data-target="#myModal"
+                                            >修改
+                                            </button>
+                                            <button class="btn btn-danger delBtn"
+                                                    th:classroomId="${classroom.id}">
+                                                删除
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!--modal-->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close modal_hide" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title">修改教学楼</h4>
+                    </div>
+
+                    <div class="modal-body row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="hidden" id="type">
+                                <label for="buildingName">所在教学楼</label>
+                                <select class="form-control" id="buildingName">
+                                    <option th:each="building:${buildingList}"
+                                            th:id="'buildingId-'+${building.id}"
+                                            th:value="${building.id}"
+                                            th:floor="${building.totalFloor}"
+                                            th:text="${building.buildingName}"></option>
+                                </select>
+                                <label for="floor">楼层</label>
+                                <input class="form-control" type="text" id="floor">
+                                <label for="classroomName">教室名</label>
+                                <input class="form-control" type="text" id="classroomName">
+                                <label for="peopleNum">教室人数</label>
+                                <input class="form-control" type="text" id="peopleNum">
+                            </div>
+                            <div class="pull-right">
+                                <button class="btn btn-danger btn-sm modal_hide" type="button"
+                                        data-dismiss="modal"
+                                        aria-hidden="true">取消
+                                </button>
+                                <button class="btn btn-success btn-sm" id="confirmBtn"
+                                        type="button">确定
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--modal end-->
+    </div>
+</section>
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<!--dynamic table-->
+<script type="text/javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization-->
+<script th:src="@{/js/dynamic_table_init.js}"></script>
+<script>
+    $(function () {
+        $("#dynamic-table_filter").hide();
+    })
+
+    $(".updateBtn").click(function () {
+        $("#type").val($(this).attr("classroomId"))
+        let buildingId = $(this).attr("buildingId");
+        let floor = $(this).attr("floor");
+        let classroomName = $(this).attr("classroomName");
+        let peopleNum = $(this).attr("peopleNum")
+        $("#buildingId-" + buildingId).attr("selected", "selected");
+        $("#buildingName").removeAttr("disabled");
+        $("#floor").val(floor)
+        $("#classroomName").val(classroomName)
+        $("#peopleNum").val(peopleNum)
+    })
+
+    $("#addBtn").click(function () {
+        $("#type").val("add")
+        $("#buildingId-[[${buildingId}]]").attr("selected", "selected");
+        $("#buildingName").attr("disabled", "disabled");
+        $("#floor").val("")
+        $("#classroomName").val("")
+        $("#peopleNum").val("")
+    })
+
+    $("#confirmBtn").click(function () {
+        let buildingId = $("#buildingName option:selected").val();
+        let floor = $("#floor").val()
+        let classroomName = $("#classroomName").val()
+        let peopleNum = $("#peopleNum").val();
+        if ($("#type").val() === "add") {
+            $.post("/teacher/addClassroom",
+                {
+                    buildingId: buildingId,
+                    floor: floor,
+                    classroomName: classroomName,
+                    peopleNum: peopleNum
+                },
+                function (data, status) {
+                    if (data === "true") {
+                        alert("添加成功！")
+                        window.location.href = "/teacher/classroomManage?buildingId=[[${buildingId}]]";
+                    } else {
+                        alert("添加失败!")
+                    }
+                });
+        } else {
+            let id = $("#type").val();
+            $.post("/teacher/updateClassroom",
+                {
+                    id: id,
+                    buildingId: buildingId,
+                    floor: floor,
+                    classroomName: classroomName,
+                    peopleNum: peopleNum
+                },
+                function (data, status) {
+                    if (data === "true") {
+                        alert("修改成功！")
+                        window.location.href = "/teacher/classroomManage?buildingId=[[${buildingId}]]";
+                    } else {
+                        alert("修改失败!")
+                    }
+                });
+        }
+    })
+
+    $(".delBtn").click(function () {
+        if (confirm("是否确认删除？")) {
+            let id = $(this).attr("classroomId");
+            $.post("/teacher/deleteClassroom",
+                {
+                    id: id
+                },
+                function (data, status) {
+                    if (data === "true") {
+                        alert("删除成功！")
+                        window.location.href = "/teacher/classroomManage?buildingId=[[${buildingId}]]";
+                    } else {
+                        alert("删除失败!")
+                    }
+                });
+        }
+    })
+
+</script>
+</body>
+</html>

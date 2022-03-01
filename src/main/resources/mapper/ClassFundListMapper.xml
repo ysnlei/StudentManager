@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="club.justca.studentmanager.mapper.ClassFundListMapper">
+
+    <!-- 配置查询所有 ,写完就不用写实现类了-->
+    <select id="findAll" resultType="classFundList">
+        SELECT *
+        FROM `class_fund_list`;
+    </select>
+
+    <select id="findByMajor" resultType="classFundList">
+        SELECT *
+        from `class_fund_list`
+        where major = #{major}
+    </select>
+
+    <select id="findById" resultType="classFundList">
+        SELECT *
+        from `class_fund_list`
+        where id = #{id}
+    </select>
+
+    <update id="update" parameterType="classFundList">
+        UPDATE `class_fund_list`
+        SET major = #{major},
+            title = #{title},
+            money = #{money}
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insert" parameterType="classFundList">
+        INSERT INTO `class_fund_list`(id, major, title, money)
+        values (NULL, #{major}, #{title}, #{money})
+    </insert>
+
+</mapper>

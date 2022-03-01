@@ -1,0 +1,32 @@
+.panel-body{
+    background-color: #fff;
+    padding: 50px 100px 0!important;
+    min-height: 700px;
+}
+.title{
+    color: #333333;
+    font-size: 25px;
+    text-align: center;
+    /*height: 50px;*/
+    line-height: 50px;
+}
+
+.spacer{
+    border-bottom: 2px darkred solid;
+    margin: 20px;
+}
+
+.article-detail{
+    text-align: center;
+}
+
+.article-detail span:first-child{
+    margin-right: 50px;
+}
+
+.article{
+    padding: 50px 50px 0;
+}
+.attachment{
+    padding: 10px 50px;
+}

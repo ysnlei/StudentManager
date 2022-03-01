@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>校历</title>
+    <link rel="stylesheet" th:href="@{/css/preview-article.css}"/>
+    <div th:replace="~{/student/common::common-css}"></div>
+
+    <style>
+        .container {
+            width: 1000px;
+            margin: auto;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{/student/common::header}" class="header"></div>
+<!--内容区域开始-->
+<div class="container">
+    <div style="height: 21px;">
+        <div style="position: absolute;right: 0;">当前位置：
+            <a th:href="@{/student/index}">首页</a>
+            -
+            <a th:href="@{/student/schoolYearList}">校历</a>
+        </div>
+    </div>
+    <div class="title" th:text="${schoolYear.year+'校历'}">文章标题</div>
+    <div class="spacer"></div>
+    <div class="article">
+        <img style="width: 900px" th:src="${schoolYear.photoUrl}" alt="">
+    </div>
+</div>
+<!--内容区域结束-->
+
+<div class="banner-shadow"></div>
+
+<div class="footer">
+    <p>Copyright &copy; 2021 JUST All rights reserved.</p>
+</div>
+<div th:replace="~{/student/common::common-script}"></div>
+</body>
+</html>

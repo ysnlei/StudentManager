@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>已发布通知</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+    <!--dynamic table-->
+    <link th:href="@{/js/advanced-datatable/css/demo_page.css}" rel="stylesheet"/>
+    <link th:href="@{/js/advanced-datatable/css/demo_table.css}" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/js/data-tables/DT_bootstrap.css}"/>
+    <style>
+        th {
+            text-align: center;
+        }
+
+        td {
+            vertical-align: middle !important;
+            text-align: center !important;
+        }
+    </style>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            已发布通知管理
+                        </header>
+                        <div class="panel-body">
+                            <!--表格开始-->
+                            <div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                                <table class="display table table-bordered table-striped dataTable" id="dynamic-table"
+                                       aria-describedby="dynamic-table_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="center sorting_desc" role="columnheader" tabindex="0"
+                                            aria-controls="dynamic-table"
+                                            rowspan="1" colspan="1" style="width: 292px;" aria-sort="descending">
+                                            id
+                                        </th>
+                                        <th class="center" role="columnheader" tabindex="0"
+                                            aria-controls="dynamic-table" rowspan="1"
+                                            colspan="1" style="width: 417px;">
+                                            标题
+                                        </th>
+                                        <th class="center" role="columnheader" tabindex="0"
+                                            aria-controls="dynamic-table" rowspan="1"
+                                            colspan="1" style="width: 380px;">
+                                            作者
+                                        </th>
+                                        <th class="center" role="columnheader" tabindex="0"
+                                            aria-controls="dynamic-table" rowspan="1"
+                                            colspan="1" style="width: 380px;">
+                                            文章预览
+                                        </th>
+                                        <th class="center" role="columnheader" tabindex="0"
+                                            aria-controls="dynamic-table" rowspan="1"
+                                            colspan="1" style="width: 380px;">
+                                            创作时间
+                                        </th>
+                                        <th class="center" role="columnheader" tabindex="0"
+                                            aria-controls="dynamic-table" rowspan="1"
+                                            colspan="1" style="width: 380px;">
+                                            附件地址
+                                        </th>
+                                        <th class="center" role="columnheader" tabindex="0"
+                                            aria-controls="dynamic-table" rowspan="1"
+                                            colspan="1" style="width: 380px;">
+                                            操作
+                                        </th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                    <tr class="gradeA odd" th:each="notice:${noticeList}">
+                                        <td class="  sorting_1" th:text="${noticeStat.count}"></td>
+                                        <td class="" th:text="${notice.title}"></td>
+                                        <td class="" th:text="${notice.author}"></td>
+                                        <td class=""><a class="btn btn-success"
+                                                        th:href="@{/teacher/previewNotice/{noticeId}(noticeId=${notice.id})}">文章预览</a>
+                                        </td>
+                                        <td class="" th:text="${#dates.format(notice.createTime, 'yyyy-MM-dd')}"></td>
+
+                                        <td class=""><a th:if="${notice.attachment!=null}"
+                                                        th:href="${notice.attachment}">点击下载</a></td>
+
+                                        <td class="center hidden-phone">
+                                            <a class="btn btn-info"
+                                               th:href="@{/teacher/updateNotice/{noticeId}(noticeId=${notice.id})}">修改</a>
+                                            <button class="btn btn-danger deleteActivity" th:noticeId="${notice.id}">
+                                                删除
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <!--表格结束-->
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!--body wrapper end-->
+    </div>
+</section>
+
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<!--dynamic table-->
+<script type="text/javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization-->
+<script th:src="@{/js/dynamic_table_init.js}"></script>
+<script>
+    $(function () {
+        $("#dynamic-table_filter").hide();
+    })
+</script>
+
+<!--删除按钮点击事件-->
+<script>
+    $(".deleteActivity").click(function () {
+        let noticeId = $(this).attr("noticeId");
+        if (confirm("是否确认删除？")) {
+            $.post("/teacher/deleteNotice",
+                {
+                    noticeId: noticeId
+                },
+                function (data, status) {
+                    if (data === "true") {
+                        alert("删除成功");
+                        window.location.href = "/teacher/noticeManage";
+                    } else {
+                        alert("删除失败")
+                    }
+                });
+        }
+    })
+</script>
+</body>
+</html>
+
+
+<!--wangEditor代码-->
+<!--<div id="editor-div"></div>-->
+<!--<div th:replace="~{/teacher/common/common::wangEditor}"></div>-->

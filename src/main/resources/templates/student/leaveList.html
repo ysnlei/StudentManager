@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>请销假</title>
+    <link rel="stylesheet" th:href="@{/css/preview-article.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <div th:replace="~{/student/common::common-css}"></div>
+    <style>
+        .container {
+            width: 1000px;
+            margin: auto;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{/student/common::header}" class="header"></div>
+<!--内容区域开始-->
+<div class="container" style="min-height: 650px">
+    <div class="row-fluid">
+        <div class="span12">
+            <a class="btn btn-info" th:href="@{/student/leaveCreate}">申请请假</a>
+            <br>
+            <br>
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>请假理由</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>审批状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="leave:${leaveList}" th:state="${leave.state}"  style="height: 51px">
+                    <td th:text="${leaveStat.count}"></td>
+                    <td th:text="${session.loginUser.studentNum}">TB - Monthly</td>
+                    <td th:text="${session.loginUser.name}">TB - Monthly</td>
+                    <td th:text="${leave.reason}">TB - Monthly</td>
+                    <td th:text="${#dates.format(leave.startTime, 'yyyy-MM-dd')}">TB - Monthly</td>
+                    <td th:text="${#dates.format(leave.endTime, 'yyyy-MM-dd')}">TB - Monthly</td>
+                    <td th:text="${leave.state}">01/04/2012</td>
+                    <td>
+                        <a class="btn btn-info" th:if="${leave.state=='未审批'}"
+                           th:href="@{/student/leaveUpdate/{id}(id=${leave.id})}">修改</a>
+                        <button class="btn btn-info xiaojia" th:if="${leave.state=='审批通过'}"
+                           th:leaveId="${leave.id}">销假</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--内容区域结束-->
+
+<div class="banner-shadow"></div>
+
+<div class="footer">
+    <p>Copyright &copy; 2021 JUST All rights reserved.</p>
+</div>
+<div th:replace="~{/student/common::common-script}"></div>
+<script>
+    let ee = $("tr");
+    for (var i = 1; i < ee.length; i++) {
+        var s = ee.eq(i).attr("state")
+        if (s === "未通过") {
+            ee.eq(i).attr("class", "warning");
+        } else if (s === "未审批") {
+            ee.eq(i).attr("class", "info");
+        } else if (s === "审批通过") {
+            ee.eq(i).attr("class", "success");
+        }
+    }
+
+    $(".xiaojia").click(function (){
+        let id = $(this).attr("leaveId");
+        if(confirm("确认销假？")){
+            $.post("/student/xiaojia",{
+                id:id
+            },function (data){
+                if(data==="true"){
+                    alert("销假成功")
+                    window.location.reload();
+                }else {
+                    alert("销假失败")
+                }
+            })
+        }
+    })
+</script>
+</body>
+</html>

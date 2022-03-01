@@ -1,0 +1,102 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>学生首页</title>
+    <link rel="stylesheet" th:href="@{/css/stu_index.css}">
+    <div th:replace="~{/student/common::common-css}"></div>
+</head>
+
+<body>
+<div th:replace="~{/student/common::header}" class="header"></div>
+
+<div class="banner">
+    <!-- 通知 -->
+    <div class="list-box">
+        <div class="menu-box">
+            <div class="menu-left-border">
+                <h3 class="list-box-menu">通知</h3>
+            </div>
+            <div class="menu-right-border">
+                <div class="more_btn">
+                    <a th:href="@{/student/noticeList}">更多&gt;&gt;</a>
+                </div>
+            </div>
+        </div>
+        <div>
+            <ul class="title-list">
+                <li th:each="notice:${noticeList}">
+                    <span>
+                        <img th:src="@{/images/youjiantou_1.png}" height="15px" alt="">
+                    </span>
+                    <a th:href="@{/student/notice/{id}(id=${notice.id})}" th:text="${notice.title}"></a>
+                    <span class="article-time" th:text="${#dates.format(notice.createTime, 'yyyy-MM-dd')}"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 校历 -->
+    <div class="list-box">
+        <div class="menu-box">
+            <div class="menu-left-border">
+                <h3 class="list-box-menu">校历</h3>
+            </div>
+            <div class="menu-right-border">
+                <div class="more_btn">
+                    <a th:href="@{/student/schoolYearList}">更多&gt;&gt;</a>
+                </div>
+            </div>
+        </div>
+        <div>
+            <ul class="title-list">
+                <li th:each="schoolYear:${schoolYearList}">
+                        <span>
+                            <img th:src="@{/images/youjiantou_1.png}" height="15px" alt="">
+                        </span>
+                    <a th:href="@{/student/schoolYear/{id}(id=${schoolYear.id})}" th:text="${schoolYear.year+'校历'}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 菜单 -->
+    <div class="body">
+        <div class="container">
+            <div class="box">
+                <a th:href="@{/student/score}">
+                    <div class="img"><img th:src="@{/images/1.png}" alt=""></div>
+                </a>
+                <p>成绩查询</p>
+            </div>
+            <div class="box">
+                <a th:href="@{/student/leaveList}">
+                    <div class="img"><img th:src="@{/images/2.png}" alt=""></div>
+                </a>
+                <p>请销假</p>
+            </div>
+            <div class="box">
+                <a th:href="@{/student/rewardList}">
+                    <div class="img"><img th:src="@{/images/3.png}" alt=""></div>
+                </a>
+                <p>奖励申请</p>
+            </div>
+            <div class="box">
+                <a th:href="@{/student/info}">
+                    <div class="img"><img th:src="@{/images/4.png}" alt=""></div>
+                </a>
+                <p>个人信息</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="banner-shadow"></div>
+
+<div class="footer">
+    <p>Copyright &copy; 2021 JUST All rights reserved.</p>
+</div>
+<div th:replace="~{/student/common::common-script}"></div>
+</body>
+</html>

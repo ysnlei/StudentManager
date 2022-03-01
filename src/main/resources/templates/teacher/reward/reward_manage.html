@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>奖励信息管理</title>
+    <!--公共css开始-->
+    <div th:replace="~{/teacher/common/common::common-css}"></div>
+    <!--公共css结束-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左侧公共部分开始-->
+    <div th:replace="~{/teacher/common/common::left-nav}" class="left-side sticky-left-side"></div>
+    <!--左侧公共部分结束-->
+    <!-- main content start-->
+    <div class="main-content">
+        <!-- 头部公共部分抽取开始-->
+        <div th:replace="~{/teacher/common/common::top-nav}"></div>
+        <!-- 头部公共部分抽取结束-->
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            奖励信息管理
+                        </header>
+                        <div class="panel-body">
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>奖惩名称</th>
+                                        <th>最低绩点</th>
+                                        <th>开始时间</th>
+                                        <th>结束时间</th>
+                                        <th>说明</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="reward:${rewardList}">
+                                        <td th:text="${rewardStat.count}"></td>
+                                        <td th:text="${reward.name}"></td>
+                                        <td th:text="${reward.gpa}"></td>
+                                        <td th:text="${#dates.format(reward.startTime, 'yyyy-MM-dd')}"></td>
+                                        <td th:text="${#dates.format(reward.endTime, 'yyyy-MM-dd')}"></td>
+                                        <td th:text="${reward.explain}"></td>
+                                        <td width="200px">
+                                            <a th:href="@{/teacher/rewardDetail/{rewardId}(rewardId=${reward.id})}"
+                                               class="btn btn-primary">查看申请学生</a>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <a th:href="@{/teacher/rewardUpdate(id=${reward.id})}"
+                                               class="btn btn-info">修改</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!--body wrapper end-->
+    </div>
+</section>
+
+<div th:replace="~{/teacher/common/common::common-script}"></div>
+<!--dynamic table-->
+<script type="text/javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization-->
+<script th:src="@{/js/dynamic_table_init.js}"></script>
+<script>
+    $(function () {
+        $("#dynamic-table_filter").hide();
+    })
+</script>
+</body>
+</html>
+
+
+<!--wangEditor代码-->
+<!--<div id="editor-div"></div>-->
+<!--<div th:replace="~{/teacher/common/common::wangEditor}"></div>-->
